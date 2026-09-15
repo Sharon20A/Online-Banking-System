@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transactions</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: lightblue;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+            color: black;
+        }
+
+        table {
+            width: 80%;
+            margin: 30px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 14px 18px;
+            text-align: left;
+        }
+
+        th {
+            background-color: grey;
+            color: white;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #eaf2ff;
+        }
+
+        td {
+            color: #333;
+            font-size: 15px;
+        }
+
+        .amount {
+            font-weight: bold;
+            color: #2c7be5;
+        }
+
+        .back-link {
+            display: block;
+            width: fit-content;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: green;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-link:hover {
+            background-color: #1a5fc4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Transaction History</h1>
+
+    <table border="0">
+        <tr>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Date</th>
+        </tr>
+
+        {% for t in tx %}
+        <tr>
+            <td>
+                {% if t.sender_id == session['user_id'] and t.receiver_id == None %}
+                    Withdrawal
+                {% elif t.sender_id == session['user_id'] %}
+                    Sent to User {{ t.receiver_id }}
+                {% elif t.receiver_id == session['user_id'] %}
+                    Received from User {{ t.sender_id }}
+                {% endif %}
+            </td>
+            <td class="amount">${{ t.amount }}</td>
+            <td>{{ t.timestamp }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="/dashboard" class="back-link">Back to Dashboard</a>
+</body>
+</html>
